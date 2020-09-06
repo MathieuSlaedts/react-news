@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useContext} from 'react';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Nav from "./components/Nav";
+import Articles from "./routes/Articles";
+import Favorites from "./routes/Favorites";
+import Preferences from "./routes/Preferences";
+import MyContext from "./contexts/Contexts.js";
+import SourceContext from "./contexts/SourceContext.js";
 
-function App() {
+const App = () => {
+  const [source, setSource] = useState(useContext(SourceContext).source);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Nav />
+      <Switch>
+        <SourceContext.Provider value={{source, setSource}}>
+          <MyContext.Provider value={{articles:["articles1", "article2"]}}>
+            <Route exact path="/" component={Articles} />
+            <Route exact path="/favorites" component={Favorites} />
+            <Route exact path="/preferences" component={Preferences} />
+        </MyContext.Provider>
+        </SourceContext.Provider>
+      </Switch>
+  </Router>
+  </div>
   );
 }
 
